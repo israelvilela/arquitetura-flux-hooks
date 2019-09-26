@@ -11,10 +11,12 @@ import * as CartActions from '../../store/modules/cart/actions';
 export default function Home() {
   const [products, setProducts] = useState([]);
 
-  const amount = useSelector(state => state.cart.reduce((sumAmount, product)=> {
-    sumAmount[product.id] = product.amount;
-    return sumAmount;
-  }, {}));
+  const amount = useSelector(state =>
+    state.cart.reduce((sumAmount, product) => {
+      sumAmount[product.id] = product.amount;
+      return sumAmount;
+    }, {})
+  );
 
   const dispatch = useDispatch();
 
@@ -30,29 +32,30 @@ export default function Home() {
       setProducts(data);
     }
 
-    loadProducts()
+    loadProducts();
   }, [products]);
 
   function handleAddToCart(id) {
     dispatch(CartActions.addToCartRequest(id));
   }
 
-    return (
-      <ProductList>
-        {products.map(product => (
-          <li key={product.id}>
-            <img src={product.image} alt={product.title} />
-            <strong>{product.title}</strong>
-            <span>{product.priceFormatted}</span>
+  return (
+    <ProductList>
+      {products.map(product => (
+        <li key={product.id}>
+          <img src={product.image} alt={product.title} />
+          <strong>{product.title}</strong>
+          <span>{product.priceFormatted}</span>
 
-            <button type="button" onClick={() => handleAddToCart(product.id)}>
-              <div>
-                <MdAddShoppingCart size={16} color="#FFF" /> {amount[product.id] || 0}
-              </div>
-              <span>Adicionar ao carrinho</span>
-            </button>
-          </li>
-        ))}
-      </ProductList>
-    );
+          <button type="button" onClick={() => handleAddToCart(product.id)}>
+            <div>
+              <MdAddShoppingCart size={16} color="#FFF" />{' '}
+              {amount[product.id] || 0}
+            </div>
+            <span>Adicionar ao carrinho</span>
+          </button>
+        </li>
+      ))}
+    </ProductList>
+  );
 }
